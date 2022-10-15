@@ -1,15 +1,29 @@
 <template>
   <div class="trade-block">
     <section class="trade-block__top section">
-      <IUserSelectedThings class="trade-block__user-select section" />
+      <IUserSelectedThings
+        :data="activeUserItems"
+        :limit="userLimit"
+        class="trade-block__user-select section"
+      />
       <ITradeSelectedThing
-        :data="{ id: 1, name: 'Shoes 2' }"
+        :data="activeTradeItem"
         class="trade-block__trade section"
       />
     </section>
     <div class="trade-block__main">
-      <IThingsList class="trade-block__box section _left" />
-      <IThingsList class="trade-block__box section _right" />
+      <IThingsList
+        class="trade-block__box section _left"
+        :data="userItems"
+        :choose-limit="userLimit"
+        @change="changeUserList"
+      />
+      <IThingsList
+        class="trade-block__box section _right"
+        :data="tradeItems"
+        :choose-limit="tradeLimit"
+        @change="changeTradeItem"
+      />
     </div>
   </div>
 </template>
@@ -18,9 +32,41 @@
 import IThingsList from "@/components/IThingsList";
 import IUserSelectedThings from "@/components/IUserSelectedThings";
 import ITradeSelectedThing from "@/components/ITradeSelectedThing";
+
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
 export default {
   name: "ITradeBlock",
   components: { IThingsList, IUserSelectedThings, ITradeSelectedThing },
+  setup() {
+    const store = useStore();
+
+    const userLimit = 6;
+    const tradeLimit = 1;
+    const activeTradeItem = ref(null);
+    const activeUserItems = ref([]);
+    const userItems = computed(() => store.state.userItems);
+    const tradeItems = computed(() => store.state.tradeItems);
+
+    const changeUserList = (list) => (activeUserItems.value = list);
+
+    const changeTradeItem = (item) => {
+      activeTradeItem.value = item;
+    };
+
+    //activeTradeItem, activeUserItems - что-то делаем с этим в дальшнейшем
+
+    return {
+      userItems,
+      tradeItems,
+      activeUserItems,
+      activeTradeItem,
+      userLimit,
+      tradeLimit,
+      changeUserList,
+      changeTradeItem,
+    };
+  },
 };
 </script>
 
