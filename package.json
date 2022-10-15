@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "stylus": "^0.59.0",
+    "stylus-loader": "^7.1.0",
     "vue": "^3.2.13",
     "vuex": "^4.1.0"
   },
